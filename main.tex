@@ -27,6 +27,13 @@
 \usepackage{algorithmic}
 \usepackage[switch]{lineno}
 
+
+
+%für symbols
+\usepackage{ dsfont }
+\usepackage{ amssymb }
+
+
 % Comment out this line in the camera-ready submission
 \linenumbers
 
@@ -110,16 +117,15 @@ fourth@example.com
 \maketitle
 
 \begin{abstract}
-    
 \end{abstract}
 
 \section{Introduction}
 \subsection{Motivation and Practical Goal}
-As Artificial Intelligence (AI) models are getting more and more complex, it consequently gets harder for humans to understand these systems. In some areas in particular Deep Neural Networks (DNNs) models getting so complex that even expert loosing sight making thes models essentially a Black-Box. 
+As Artificial Intelligence (AI) models are getting more and more complex, it consequently gets harder for humans to understand these systems. In some areas in particular Deep Neural Networks (DNNs) models getting so complex that even expert are loosing sight making these models essentially a Black-Box. 
 
-As AI models become increasingly integrated into our lives, it is crucial to understand the factors that influence their  decisions. This has raised the need to have explanations for AI model decisions and played an important role in motivating researchers to focus on making complicated models explainable.
+As AI models become increasingly integrated into our lives, it is crucial to understand the factors that influence their decisions. This has raised the need to have explanations for AI model decisions and played an important role in motivating researchers to focus on making complicated models explainable.
 
-Explainable Artificial Intelligence (XAI) is a field of research that focuses on making AI models more interpretable and understandable to humans.  XAI aims to bridge the gap between the black box nature of traditional AI models and the need for transparency and accountability in decision-making processes. 
+Explainable Artificial Intelligence (XAI) is a field of research that focuses on making AI models more interpretable and understandable to humans. XAI aims to bridge the gap between the black box nature of traditional AI models and the need for transparency and accountability in decision-making processes. 
 
 The need for trust in decisions driven by AI models becomes particularly important in high-stakes domains such as healthcare and finance or autonomous systems such as self driving, where decisions can have significant impacts on people's lives.
 
@@ -129,8 +135,7 @@ XAI can facilitate better collaboration between humans and AI systems. By provid
 
 XAI is an essential field for ensuring the responsible and safe use of AI systems. XAI holds its relevance in all areas of AI. As AI models continue to evolve, XAI techniques will play a crucial role in ensuring their transparency, accountability, and integration into society.
 
-Though this paper only focuses on the context of computer vision,
-
+In this paper XAI is examined in the context of computer vision, in particular in the context of Convolutional Neural Networks (CNNs). 
 
 \subsection{Problem Statement}
 \subsection{Scientific Contributions}
@@ -147,7 +152,7 @@ The goal of this paper is to compare White-box and Black-Box methodes. To narrow
 \section{Background}
 
 \subsection{Fundamentals of XAI}
-XAI techniques can be broadly categorized into two main approaches: white-box and black-box methods.
+XAI techniques can be broadly categorized into two main approaches: White-box and Black-box methods.
 
 White-box methods rely on an understanding of the internal workings of the AI model to generate explanations. This typically involves analyzing the model's architecture and parameters, such as analyzing the weights and activations of specific layers to extract interpretable insights.
 
@@ -155,27 +160,79 @@ Black-box methods, on the other hand, do not require prior knowledge of the mode
 
 The selection of an XAI method hinges on the specific AI model and application. White-box methods offer highly interpretable explanations by analyzing the model's internal workings. However, their applicability diminishes with complex models like DNNs commonly used in computer vision. Conversely, black-box methods can explain DNNs, but their explanations may be less transparent and require more data for training.
 
-The choice of XAI methods depends on the specific model and application, and both white-box and black-box approaches have their own merits.
-
-
-\subsection{White-Box-Methodes}
-In this paper Grad-CAM ~\cite{Selvaraju_2019} is used exemplary to illustrate the concept of White-Box methodes.
+The choice of XAI methods depends on the specific model and application, and both white-box and black-box approaches have their own merits as shown in this paper.
 
 
 
-\subsection{Black-Box-Methodes}
+
+\subsection{Grad-CAM: White-Box-Methodes}
+In this paper Gradient-weighted Class Activation Mapping (Grad-CAM) ~\cite{Selvaraju_2019} is used exemplary to illustrate the concept of white-box methodes.
+As mentioned, white-box methodes focus on the internal architecture of a model. 
+
+% Grad Cam intro
+Grad-CAM uses the idea that deep CNNs catch high-level visual connections. The higher one goes in convolutional layers in the networtk, the higher-level the visual correlation gets. Grad-CAM tipically uses the last convolutional layer because that is where the highest level of visual semantics is to be found.
+In these layers neurons are trimmed on spatial associations that are class specific (e.g. they look for round or straigt shaped parts in a MNIST image to choose between round or straigt shaped numbers.) 
+
+% Ziel erklären
+In order to obtain a class-discriminative localization map Grad-CAM uses the gradient information flowing into the last convolutional layer of the CNN. With that information it can then assign importance to each neuron for a given input class.
+
+% Formel erklärt
+To aquire the class-discriminative localization map \( L_{Grad-CAM}^{c} \in \mathds{R}^{ u \times v} \) of width u and height v for any class c, one must first compute the gradient of the score for class c, \(y^c\), with respect to feature map activations \(A^k\) of a convolutional layer: \( \dfrac{ \partial y^c}{ \partial A^k} \). 
+
+To gain the neuron importance weights \(\alpha^c_k\) the gradients backpropagating are gloabally average-pooled across the width and height dimensions (indexed by i and j): 
+
+\[ \alpha^c_k = \dfrac{1}{Z}\sum_{i} \sum_{j} \dfrac{\partial y^c}{\partial A^k}  \]
+
+This weight $\alpha^c_k$ represents a partial approximation of the deep network downstram from $A$ and captures the significance of feature map $k$ for a target class $c$. We apply a Rectified Linear Unit (ReLU) to the linear combination of maps because we are only interested in features that have a favorable contribution to the class. 
+
+\[ L_{Grad-CAM}^{c} = ReLU ( \sum_{k} \alpha^c_k A^k ) \]
+
+This produces a heatmap identical in dimensions to the convolutional feature map ($14 \times 14$ in the case of VGG ~\cite{simonyan2015deep} and AlexNet ~\cite{krizhevsky2012} )
+
+
+
+
+
+
+
+
+
+\subsection{LIME: Black-Box-Methodes}
 In this paper Local Interpretable Model-Agnostic Explanation (LIME) ~\cite{ribeiro2016why} is used exemplary to illustrate the concept of Black-Box methodes.
+
+% Goal of Lime
+Lime constructs an understandable model, ensuring alignment with the classifier on a local level. The objective is to provide an interpretable explanation that is understandable to humans regardless of the features utilized by the model. 
+While LIME is adaptable for a variety of model families, this paper concentrates on it's implementation within computer vision. 
+When representing images, an interpretable depiction might involve a binary vector indicating the presence or absense of superpixels (clusters of similar pixels).
+
+% Lime in a nutshell
+The explanation constructed by LIME is obtained by:
+\[\xi(x) = argmin_{g \in G} \mathcal{L}
+(f, g, \pi_x) + \Omega(g) \]
+
+A model $g \in G$ (e.g. a DNN) where $\Omega(g)$ denotes the measure of complexity of the explanation (for linear models $\Omega(g)$ the number of non-zero weights. 
+$f(x)$ represents the probability that $x$ belongs to a specific class.
+We employ $\pi_x(z)$ as a measure between an instance $z$ to $x$, shaping the local environment centered on $x$. 
+The locality-arware loss $\mathcal{L}(f, g, \pi_x)$ evaluates how accurately $g$ captures the essence of $f$ within the confines of $\Omega(g)$. 
+To achieve both understandability and fidelity to local features requires minimizing $\mathcal{L}(f, g, \pi_x)$ without making any assumptions about $f$ while constraining $\Omega(g)$ to a level that supports interpretability. 
+
+%Sampling
+Perturbed samples are generated by randomly selecting nonzero elements from a point and converting them into a new representation. These samples, along with their labels obtained from the original model, are gathered in a dataset $Z$. This is then used to train an explanation model (optimizing equation 1) to get an explanation $\xi(x)$. 
+
+%Sparse Linear Explainations
+The key idea is to sample instances near and far from the point of interest, emphasizing local fidelity captured by the weighting factor $\pi_x$. Despite potential sampling noise, the method remains robust due to the weighting scheme. 
+
+We use a set of linear modells, with each being a local approximation of  
 
 
 \subsection{Evaluation of Feature Importance Methods}
-
 The challenge of comparing explanation techniques and objectively evaluating their quality lies in the nature of DNN predictions. Often, these predictions might only be interpretable by experts. Consequently, an explanation technique itself might also require expert knowledge for interpretation. To address this, we can introduce quantitative metrics.
 
 Explanation Selectivity~\cite{MONTAVON20181} is a quantitative metric used to assess the quality of an explanation method for feature importance in DNNs. It essentially measures how well the explanation method identifies the features that have the strongest impact on the DNN's prediction.
 
 The method works by iteratively removing features based on their assigned relevance scores (provided by the explanation method) and tracking how much the DNN's prediction value (function value) drops after removing each feature. A sharp drop in prediction value after removing a feature indicates high selectivity, meaning the explanation method effectively identified a feature with a strong influence on the prediction.
 
-Explanation Selectivity is straightforward and relatively easy to apply. It offers intuitive interpretation: a lower AUC score indicates better selectivity. Additionally, Explanation Selectivity is widely used and allows us to compare different explanation methods to see which one assigns relevance scores that best reflect the actual feature importance for the DNN's prediction. In this paper, Explanation Selectivity is used to compare the different methods LIME and Grad-CAM.
+Explanation Selectivity is straightforward and relatively easy to apply. It offers intuitive interpretation: a lower AUC score indicates better selectivity. Furthermore, Explanation Selectivity is widely used and allows us to compare different explanation methods to see which one assigns relevance scores that best reflect the actual feature importance for the DNN's prediction. In this paper, Explanation Selectivity is used to compare the feature importance of LIME and Grad-CAM.
 
 
 \section{Use Case Study}

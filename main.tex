@@ -164,12 +164,12 @@ The choice of XAI methods depends on the specific model and application, and bot
 
 
 
-
+%GRADCAM Background
 \subsection{Grad-CAM: White-Box-Methodes}
 In this paper Gradient-weighted Class Activation Mapping (Grad-CAM) ~\cite{Selvaraju_2019} is used exemplary to illustrate the concept of white-box methodes.
 As mentioned, white-box methodes focus on the internal architecture of a model. 
 
-% Grad Cam intro
+% intro
 Grad-CAM uses the idea that deep CNNs catch high-level visual connections. The higher one goes in convolutional layers in the networtk, the higher-level the visual correlation gets. Grad-CAM tipically uses the last convolutional layer because that is where the highest level of visual semantics is to be found.
 In these layers neurons are trimmed on spatial associations that are class specific (e.g. they look for round or straigt shaped parts in a MNIST image to choose between round or straigt shaped numbers.) 
 
@@ -177,22 +177,33 @@ In these layers neurons are trimmed on spatial associations that are class speci
 In order to obtain a class-discriminative localization map Grad-CAM uses the gradient information flowing into the last convolutional layer of the CNN. With that information it can then assign importance to each neuron for a given input class.
 
 % Formel erklärt
-To aquire the class-discriminative localization map \( L_{Grad-CAM}^{c} \in \mathds{R}^{ u \times v} \) of width u and height v for any class c, one must first compute the gradient of the score for class c, \(y^c\), with respect to feature map activations \(A^k\) of a convolutional layer: \( \dfrac{ \partial y^c}{ \partial A^k} \). 
+To aquire the class-discriminative localization map 
+
+\begin{equation}
+    L_{Grad-CAM}^{c} \in \mathds{R}^{ u \times v}
+\end{equation}
+
+of width u and height v for any class c, one must first compute the gradient of the score for class c, \(y^c\), with respect to feature map activations \(A^k\) of a convolutional layer: \( \dfrac{ \partial y^c}{ \partial A^k} \). 
 
 To gain the neuron importance weights \(\alpha^c_k\) the gradients backpropagating are gloabally average-pooled across the width and height dimensions (indexed by i and j): 
 
-\[ \alpha^c_k = \dfrac{1}{Z}\sum_{i} \sum_{j} \dfrac{\partial y^c}{\partial A^k}  \]
+\begin{equation}
+    \alpha^c_k = \dfrac{1}{Z}\sum_{i} \sum_{j} \dfrac{\partial y^c}{\partial A^k}
+\end{equation}
+
 
 This weight $\alpha^c_k$ represents a partial approximation of the deep network downstram from $A$ and captures the significance of feature map $k$ for a target class $c$. We apply a Rectified Linear Unit (ReLU) to the linear combination of maps because we are only interested in features that have a favorable contribution to the class. 
+\begin{equation}
+    L_{Grad-CAM}^{c} = ReLU ( \sum_{k} \alpha^c_k A^k )
+\end{equation}
 
-\[ L_{Grad-CAM}^{c} = ReLU ( \sum_{k} \alpha^c_k A^k ) \]
 
 This produces a heatmap identical in dimensions to the convolutional feature map ($14 \times 14$ in the case of VGG ~\cite{simonyan2015deep} and AlexNet ~\cite{krizhevsky2012} )
 
 
 
 
-
+% LIME background
 \subsection{LIME: Black-Box-Methodes}
 In this paper Local Interpretable Model-Agnostic Explanation (LIME) ~\cite{ribeiro2016why} is used exemplary to illustrate the concept of Black-Box methodes.
 

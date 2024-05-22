@@ -129,8 +129,27 @@ By identifying potential biases, errors, or areas for optimization, XAI can help
 
 Overall, XAI is essential for ensuring the responsible and safe use of AI systems. It is relevant across all areas of AI and will play a crucial role in ensuring transparency, accountability, and the integration of AI models into society as they continue to evolve.
 
+
+
 \subsection{Problem Statement}
+% The Case for Explanability
 As AI models become more integrated into our daily lives, understanding the factors influencing their decisions becomes increasingly important. This need has driven researchers to focus on developing explainability methods for complex models. However, selecting an appropriate XAI method for a specific application remains a challenge.
+
+% The Case for Feature Importance in Explanability
+Although there is a vast array of XAI methods available (see Related Work), this paper focuses specifically on Feature Importance methods due to their critical role in identifying which features are most influential in the model’s predictions. This is essential for building trust in AI systems and facilitating informed decision-making. However, the selection of the appropriate Feature Importance method itself poses significant problems:
+
+\begin{enumerate}
+    \item Interpretability vs. Fidelity:
+    Balancing interpretability and fidelity is challenging. Interpretability ensures that users can understand the explanations, while fidelity ensures that the explanations accurately reflect the model’s behavior. High interpretability often comes at the cost of fidelity and vice versa.
+    \item Black-Box vs. White-Box Methods:
+    Deciding between black-box and white-box methods for Feature Importance is complex. Black-box methods, like LIME, do not require access to the model’s internal structure but may lack the depth of explanation provided by white-box methods, like Grad-CAM, which utilize the model’s internal gradients and architecture.
+    \item Local vs. Global Explanations:
+    Feature Importance methods typically provide local explanations, focusing on specific predictions rather than the model’s overall behavior. This localized focus can limit the broader understanding of the model’s decision-making process.
+\end{enumerate}
+
+Given these challenges, it is crucial to understand the trade-offs involved in selecting the appropriate Feature Importance method. An analysis of black-box and white-box Feature Importance methods for local explanations can provide valuable insights into these trade-offs, thereby aiding in making well-informed decisions, and ultimately enhancing trust in AI models, as they become omnipresent in our lives.
+
+
 
 \subsection{Scientific Contributions}
 % Overarching Research Question
@@ -163,35 +182,35 @@ The goal of this paper is to compare white-box and black-box methods, specifical
 Explainable Artificial Intelligence (XAI) aims to make AI models more interpretable and understandable to humans. This is crucial for building trust, ensuring transparency, and facilitating decision-making in critical areas such as healthcare, finance, and autonomous systems. XAI techniques can be broadly categorized into two main approaches: white-box methods and black-box methods.
 
 %General Idea
-White-box methods rely on an understanding of the internal workings of the AI model to generate explanations. This typically involves analyzing the model’s architecture, weights, and activations of specific layers to extract interpretable insights. In contrast, black-box methods do not require prior knowledge of the model’s internal structure. Instead, they treat the model as a black box and focus on analyzing its input-output behavior to generate explanations. This approach is particularly useful for complex models such as deep neural networks (DNNs), where understanding the internal workings is challenging or impractical.
+White-box methods rely on an understanding of the internal workings of the AI model to generate explanations. In contrast, black-box methods do not require prior knowledge of the model’s internal structure. Instead, they treat the model as a black box and focus on analyzing its input-output behavior to generate explanations. This approach is particularly useful for complex models such as deep neural networks (DNNs), where understanding the internal workings is challenging or impractical.
 
 %Detailed Explanation
 \subsubsection{White-Box Methods}
 White-box methods rely on an understanding of the internal workings of the AI model to generate explanations. This typically involves analyzing the model’s architecture, weights, and activations of specific layers to extract interpretable insights. Examples of white-box techniques include gradient-based methods and layer-wise relevance propagation.
 
-Gradient-based methods: These methods use the gradients of the output with respect to the input features to understand the importance of each feature. For example, Grad-CAM (Gradient-weighted Class Activation Mapping) generates visual explanations by using gradient information from the last convolutional layer. This produces a heatmap highlighting important regions in the input image, helping to understand high-level visual features captured by deep CNNs.
+Gradient-based methods: These methods use the gradients of the output with respect to the input features to understand the importance of each feature. For example, Grad-CAM (Gradient-weighted Class Activation Mapping) generates visual explanations for Convolutional Neural Networks (CNNs) by using gradient information from the last convolutional layer. This produces a heatmap highlighting important regions in the input image, helping to understand high-level visual features captured by deep CNNs.
 
 Layer-wise relevance propagation: This technique decomposes the prediction by propagating relevance scores backward through the network layers, assigning importance scores to each input feature.
 
 %Advantages and Disadvantages
-White-box methods have the advantage of high interpretability due to direct access to model parameters. This allows for detailed insights into the model’s decision-making process. However, their applicability diminishes with the complexity of the model. As models like DNNs become more complex, understanding and analyzing their internal structures requires a deep understanding of the model architecture, which can be a significant drawback.
+White-box methods have the advantage of high fidelity due to direct access to model parameters. This allows for detailed insights into the model’s decision-making process. However, their applicability diminishes with the complexity of the model. As models like DNNs become more complex, understanding and analyzing their internal structures requires a deep understanding of the model architecture, which can be a significant drawback.
 
 \subsubsection{Black-Box Methods}
 In contrast, black-box methods do not require access to the internal structure of the model. Instead, they focus on analyzing the input-output behavior to generate explanations. Techniques in this category include perturbation-based methods and surrogate models.
 
 Perturbation-based methods: These methods generate explanations by observing the changes in the model’s output in response to perturbations in the input data. LIME (Local Interpretable Model-Agnostic Explanations) is a prominent example. LIME generates perturbed samples around the instance to be explained and fits an interpretable model to approximate the local decision boundary of the black-box model. This method is model-agnostic and can be applied to any classifier.
+
 Surrogate models: These are simpler, interpretable models trained to approximate the predictions of the complex model within a local region around the instance being explained.
 
 %Advantages and Disadvantages
 Black-box methods are highly versatile and can be applied to any black-box model without requiring internal access. This flexibility makes them suitable for a wide range of models and data types. However, these methods can be computationally intensive due to the need for multiple model evaluations. Additionally, the explanations they produce may vary depending on the locality considered, which can lead to less consistent results.
 
 %Discussion
-The choice between white-box and black-box methods depends on the specific AI model and application. White-box methods provide detailed, interpretable insights but may be less practical for complex models like DNNs. Black-box methods, while more flexible and applicable to any model, can be computationally expensive and may produce less consistent explanations. Understanding these trade-offs is crucial for selecting the appropriate XAI method for a given application, ensuring that the explanations are both accurate and useful for end-users..
+The choice between white-box and black-box methods depends on the specific AI model and application. White-box methods provide detailed, interpretable insights but may be less practical for complex models like DNNs. Black-box methods, while more flexible and applicable to any model, can be computationally expensive and may produce less consistent explanations. Understanding these trade-offs is crucial for selecting the appropriate XAI method for a given application, ensuring that the explanations are both accurate and useful for end-users.
 
 %Feature Importance
+\subsubsection{Feature Importance}
 Feature importance methods play a critical role in XAI by identifying which features are most influential in the model’s predictions. Both white-box and black-box methods can be used to assess feature importance. For example, Grad-CAM identifies important regions in an image by analyzing gradient information, while LIME approximates the local decision boundary to highlight influential features in the input data. These methods provide insights that help users understand the factors driving the model’s decisions, which is essential for building trust and facilitating informed decision-making.
-
-
 
 %GRADCAM Background
 \subsection{Grad-CAM: White-Box Method}
@@ -206,7 +225,7 @@ Detailed Steps:
 \begin{enumerate}
     \item Gradient Calculation:
     
-    The first step in Grad-CAM is to compute the gradient of the score for a target class $y^c$ with respect to the feature map activations $A^k$ of the last convolutional layer. This gradient, $\frac{\partial y^c}{\partial A^k}$, indicates how much a small change in the activations of $A^k$ will affect the score of class $c$.
+    The first step in Grad-CAM is to compute the gradient of the score for a target class $y^c$ with respect to the feature map activations $A^k \in \mathds{R}^{w' \times h'}$ of the last convolutional layer, where $w',h'$ are width and height of the activations respectively. This gradient, $\frac{\partial y^c}{\partial A^k}$, indicates how much a small change in the activations of $A^k$ will affect the score of class $c$.
     
     \item Neuron Importance Weights Calculation:
     
@@ -220,18 +239,18 @@ Detailed Steps:
 
     \item Grad-CAM Heatmap Calculation:
     
-    Finally, the class-discriminative localization map $L^c_{\text{Grad-CAM}}$ is computed using a weighted combination of the feature maps, followed by applying the Rectified Linear Unit (ReLU) to focus on the features that have a positive influence on the class score:
+    Finally, the class-discriminative localization map $L^c_{\text{Grad-CAM}} \in \mathds{R}^{w' \times h'}$ is computed using a weighted combination of the feature maps, followed by applying the Rectified Linear Unit (ReLU) to focus on the features that have a positive influence on the class score:
 
     \begin{equation}
         L_{Grad-CAM}^{c} = ReLU ( \sum_{k} \alpha^c_k A^k )
     \end{equation}
     
-    This results in a heatmap that highlights the regions of the input image that are most important for the prediction.
+    This results in a heatmap that highlights the regions of the input image that are most important for the prediction. It is noticable that the coarse heatmap is of the same size as the convolutional feature maps ($14 \times 14$ in the case of last convolutional layers of VGG ~\cite{simonyan2015deep} and AlexNet ~\cite{krizhevsky2012}).
 
 \end{enumerate}
 
 %Example:
-In classifying handwritten digits (MNIST), Grad-CAM can show that certain areas of the image containing round shapes are more important for classifying the digit “0”.
+E.g., in classifying handwritten digits (MNIST), Grad-CAM can show that certain areas of the image containing round shapes are more important for classifying the digit “0”.
 
 Grad-CAM is particularly advantageous for understanding high-level visual features captured by deep CNNs. By focusing on the gradients in the last convolutional layer, it provides interpretable explanations of the model’s predictions. However, it requires a detailed understanding of the model architecture and the computation of gradients, which might not always be straightforward.
 
@@ -243,7 +262,7 @@ Grad-CAM is particularly advantageous for understanding high-level visual featur
 LIME (Local Interpretable Model-Agnostic Explanations) aims to provide interpretable explanations for the predictions of black-box models within a local region around the instance being explained by approximating the model locally with a simpler, interpretable model. The method is designed to be model-agnostic, meaning it can be applied to any classifier without requiring access to the model’s internal structure. LIME is particularly valuable in scenarios where the underlying model is too complex to understand directly. The primary goal is to offer explanations that are faithful to the model’s predictions, making them understandable to humans regardless of the features utilized by the model.
 
 %General Idea
-LIME approximates the complex decision function of the model (f) with a simpler, interpretable model (g) within a local region around the instance to be explained. This is achieved by generating a set of perturbed samples around the instance and observing the black-box model’s predictions for these samples. The perturbed samples are weighted based on their proximity to the original instance, and an interpretable model is trained on these samples to approximate the local decision boundary of the black-box model. The resulting explanation highlights the features that are most influential for the prediction in the local neighborhood of the instance.
+LIME approximates the complex decision function of the model $f$ with a simpler, interpretable model $g$ within a local region around the instance to be explained. This is achieved by generating a set of perturbed samples around the instance and observing the black-box model’s predictions for these samples. The perturbed samples are weighted based on their proximity to the original instance, and an interpretable model is trained on these samples to approximate the local decision boundary of the black-box model. The resulting explanation highlights the features that are most influential for the prediction in the local neighborhood of the instance.
 
 Detailed Steps:
 \begin{enumerate}

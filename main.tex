@@ -223,19 +223,22 @@ Grad-CAM leverages the gradients flowing into the last convolutional layer of a 
 
 Detailed Steps:
 \begin{enumerate}
+
     \item Gradient Calculation:
     
     The first step in Grad-CAM is to compute the gradient of the score for a target class $y^c$ with respect to the feature map activations $A^k \in \mathds{R}^{w' \times h'}$ of the last convolutional layer, where $w',h'$ are width and height of the activations respectively. This gradient, $\frac{\partial y^c}{\partial A^k}$, indicates how much a small change in the activations of $A^k$ will affect the score of class $c$.
+
     
     \item Neuron Importance Weights Calculation:
     
     Next, the gradients are globally average-pooled to obtain the neuron importance weights $\alpha^c_k$. These weights represent the importance of each feature map $k$ for the target class $c$:
     
     \begin{equation}
-        \alpha^c_k = \dfrac{1}{Z}\sum_{i} \sum_{j} \dfrac{\partial y^c}{\partial A^k}
+        \alpha^c_k = \dfrac{1}{Z}\sum_{i} \sum_{j} \dfrac{\partial y^c}{\partial A^k_{ij}}
     \end{equation}
     
     where $Z$ is the number of pixels in the feature map.
+
 
     \item Grad-CAM Heatmap Calculation:
     
@@ -266,9 +269,11 @@ LIME approximates the complex decision function of the model $f$ with a simpler,
 
 Detailed Steps:
 \begin{enumerate}
+    
     \item Generation of Perturbed Samples: 
     
     LIME begins by creating perturbed instances of the input data. For an image, this might involve altering superpixels (clusters of similar pixels) to generate new samples. These perturbed samples form a dataset $Z$ around the original instance $x$.
+    
     
     \item Weighting the Samples: 
     
@@ -279,13 +284,15 @@ Detailed Steps:
     
     This weighting ensures that samples closer to the original instance have a greater influence on the explanation.
     
+    
     \item Training the Interpretable Model:
     
-    LIME then trains a simple, interpretable model $g$ to approximate the predictions of the complex model $f$ within the local vicinity of $x$. The objective is to minimize the locality-aware loss $L(f, g, \pi_x)$ while keeping the model $g$ simple:
+    LIME then trains a simple, interpretable model $g$ to approximate the predictions of the complex model $f$ within the local vicinity of $x$. The objective is to minimize the locality-aware loss $\mathcal{L}(f, g, \pi_x)$ while keeping the model $g$ simple:
     \begin{equation}
-    \xi(x) = \arg\min_{g \in G} L(f, g, \pi_x) + \Omega(g)    
+    \xi(x) = \arg\min_{g \in G} \mathcal{L}(f, g, \pi_x) + \Omega(g)    
     \end{equation}
     Here, $\Omega(g)$ is a regularization term that penalizes model complexity to ensure interpretability.
+    
     
     \item Locally Weighted Square Loss:
     

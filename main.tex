@@ -168,15 +168,16 @@ By examining these questions, this paper aims to provide a comprehensive compari
 The goal of this paper is to compare white-box and black-box methods, specifically focusing on feature importance techniques. To simplify the comparison, one exemplary method from each category was chosen. Specifically, this paper compares LIME (Local Interpretable Model-Agnostic Explanations) ~\cite{ribeiro2016why} as an example of a black-box method and Grad-CAM (Gradient-weighted Class Activation Mapping) ~\cite{Selvaraju_2019} as an example of a white-box method.
 
 
-
-\section{Related Work}
-\subsection{Context}
-\subsection{Comparison}
-\subsection{Differentiation}
+% Should be included in the fully researched version
+%\section{Related Work}
+%\subsection{Context}
+%\subsection{Comparison}
+%\subsection{Differentiation}
 
 \section{Background}
 
 \subsection{Fundamentals of XAI}
+
 
 %Functional Description
 Explainable Artificial Intelligence (XAI) aims to make AI models more interpretable and understandable to humans. This is crucial for building trust, ensuring transparency, and facilitating decision-making in critical areas such as healthcare, finance, and autonomous systems. XAI techniques can be broadly categorized into two main approaches: white-box methods and black-box methods.
@@ -337,25 +338,37 @@ Additionally, the computational cost of using Explanation Selectivity can be sig
 % Why we use it in this paper
 Explanation Selectivity is a powerful and intuitive metric for evaluating feature importance methods in DNNs. By comparing the AUC scores of LIME and Grad-CAM, we can gain insights into which method provides more accurate and useful explanations. While it offers several advantages, including quantitative assessment and versatility, it also presents challenges in terms of expert knowledge requirements and computational cost. By carefully considering these factors, we can effectively use Explanation Selectivity to gain valuable insights into the performance of different explanation methods. This ultimately helps us answer the question of how to select an appropriate explanation method for a given application. More specifically, Explanation Selectivity enables us to evaluate the advantages and disadvantages of white-box and black-box methods for the application of object recognition. Furthermore, it allows us to make informed selections based on the metrics and criteria identified, thereby addressing the overarching research question and its sub-questions.
 
-
-\section{Use Case Study}
+% Highlights what to expect from the use-case study
+\section{Future Work: Use Case Study}
 \subsection{Relevance of Use Case}
-\subsection{Supporting Decision Making}
-\subsection{Building Trust}
-\subsection{Experimental Setup}
-\subsection{Experimental Results}
+Future research should concentrate on selecting a use case that directly relates to the overarching research question: How can an appropriate XAI method be selected for a given application? The chosen use case should be highly relevant to real-world scenarios where object recognition is critical. For instance, use cases in medical imaging or autonomous vehicles could serve as ideal settings to evaluate the strengths and limitations of LIME and Grad-CAM. This relevance will ensure that the insights gained from applying Explanation Selectivity to these methods will have practical implications, helping to determine the most suitable XAI approach for specific applications.
 
-\section{Discussion}
-\subsection{Interpretaion of Results}
+\subsection{Supporting Decision Making and Building Trust}
+Future research should explore how LIME and Grad-CAM contribute to both supporting decision-making processes and building trust in AI systems. One key aspect will be designing experiments that demonstrate how these methods assist users in making informed decisions within the chosen use case. Using Explanation Selectivity as a metric, future studies can objectively compare the effectiveness of each method in aiding decision-making. This might involve scenarios where decisions are based on the explanations provided by these methods, with an emphasis on determining whether white-box or black-box approaches offer superior decision support under various conditions.
+
+Additionally, it is crucial to investigate how LIME and Grad-CAM contribute to building trust in AI systems. This could involve user studies to measure the perceived trustworthiness of decisions supported by these methods. Furthermore, exploring how transparency and explainability impact users' willingness to rely on AI systems across different domains would be beneficial.
+
+\subsection{Experimental Setup}
+The experimental setup for future research should be meticulously designed to apply Explanation Selectivity across various datasets and neural network architectures. The goal is to create a controlled environment where LIME and Grad-CAM can be rigorously tested against each other. This setup should allow for the systematic application of the Explanation Selectivity metric to assess the performance of each method in different contexts, thereby addressing the research question on the criteria for selecting an XAI method.
+
+\subsection{Experimental Results}
+Future studies should focus on collecting and analyzing experimental results that highlight the advantages and disadvantages of white-box and black-box methods in the context of object recognition. By applying Explanation Selectivity, researchers can quantitatively evaluate which method provides more useful and accurate explanations. The results should also explore scenarios where one method might outperform the other, providing insights into the conditions under which each approach is most effective.
+
+\subsection{Interpretation of Results}
+Interpreting the results of the use case study will be essential for advancing the understanding of how to select the most appropriate XAI method. Future research should delve into how the outcomes of applying Explanation Selectivity to LIME and Grad-CAM inform the broader discussion of white-box versus black-box methods. This interpretation should aim to connect the experimental findings back to the core research questions, offering guidance on how these methods can be optimized or combined to improve their applicability across different use cases.
+
 \subsection{Application-oriented Evaluation}
-\subsection{Combination}
+An application-oriented evaluation should be a key component of future work, focusing on how the insights gained from the use case study can be translated into practical applications. This could involve testing LIME and Grad-CAM in real-world settings, such as healthcare or finance, to assess their effectiveness and usability. The evaluation should also consider how the choice between white-box and black-box methods impacts the overall success of the application, particularly in terms of user satisfaction and decision-making efficiency.
+
 \subsection{Generalization of Results}
 
-\section{Conclusion}
-\subsection{Summary of the key findings}
-\subsection{Limitations}
-\subsection{Further Work}
+Finally, the generalization of results should be a focus of future work. The findings from the use case study should be tested across different domains and neural network architectures to ensure that the conclusions drawn are broadly applicable. This effort will help to solidify the criteria for selecting an XAI method, ensuring that the recommendations provided are not limited to specific scenarios but can be applied to a wide range of applications.
 
+
+\section{Conclusion}
+This study has provided a comparative analysis of white-box and black-box methods for explaining deep neural networks (DNNs), with a particular focus on feature importance techniques. The findings highlight the inherent trade-offs between these two approaches. White-box methods, like Grad-CAM, provide detailed insights by leveraging the model’s internal structure but require a deep understanding of its architecture. Conversely, black-box methods, such as LIME, offer flexibility and model-agnostic explanations, though they can be computationally intensive and less consistent.
+
+While this study does not include a specific use case analysis, it offers a thorough scientific exploration of how such an analysis could be conducted in future research. By outlining potential approaches to evaluate white-box and black-box methods in relevant scenarios like medical imaging or autonomous vehicles, the paper provides valuable insights. These ideas could guide future studies in systematically assessing which method is better suited for specific applications, considering factors like decision-making support, trust-building, and performance across different contexts.
 
 %% The file named.bst is a bibliography style file for BibTeX 0.99c
 

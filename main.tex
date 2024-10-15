@@ -38,7 +38,7 @@
 
 
 % Comment out this line in the camera-ready submission
-\linenumbers
+%\linenumbers
 
 \urlstyle{same}
 
@@ -345,24 +345,22 @@ Explanation Selectivity is a powerful and intuitive metric for evaluating featur
 % Shows the use-case study on actually applying explanantion selectivity on LIME and GradCAM
 \section{Evaluation of LIME and GradCAM}
 \subsection{Relevance of the Use Case}
-In this study, object recognition was selected as a relevant use case. The test images represent real-world objects that are often used in automatic classification systems in domains such as healthcare, finance and autonous systems like self-driving cars, where decisions can significantly impact people's lives.
+Object recognition was selected as a relevant use case for this study. The images used represent real-world objects often involved in automatic classification systems in domains such as healthcare, finance, and autonomous systems like self-driving cars, where decisions can significantly impact people’s lives. Understanding which features drive these decisions is critical to enhancing trust in AI models.
 
 \subsection{Experimental Setup}
-For this study, 20 images of diffrent kinds were tested on two models (AlexNet and ResNet50) using the two explanation methods (LIME and GradCAM) across ten runs: $ 20 \times 2 \times 2 \times 10 = 800 \space $  test instances.
-The metric Explanation Selectivity, measured by the AUC score, was used to compare the effectiveness of the explanation methods. 
-The AUC scores were computed by iterevly removing the most relevant features assigned from the explainer. 
-All test images were correctly classified by both models before the experiement. The variaty of the images as well as the repetition over 10 runs per test instance was chosen to stabilize results more and to inspect the stability of the explainers. Two diffrent classification models were chosen to inspect how the explainer perform on diffrent models (with diffrent micro architectures).
+In this experiment, 20 distinct images were tested on two models, AlexNet and ResNet50, using the explanation methods LIME and GradCAM, over ten runs: $20 \times 2 \times 2 \times 10 = 800$ test instances in total. Explanation Selectivity, measured by the AUC score, was employed as the comparison metric. The AUC scores were computed by iteratively removing the most relevant features as identified by the explainers.
+All images were correctly classified by both models before the experiments. A varied selection of images, combined with ten runs per test instance, helped stabilize the results and examine the explainers’ stability. Two different classification models with distinct architectures were selected to assess how the explainers perform across different model types.
 
 %GradCAM generally provided more detailed visual explanations, while LIME proved to be more flexible.
 
 \subsection{Experimental Results}
-The AUC values shown in \ref{fig:average-auc-per-exp-and-model-plus-std-dev} reveal that LIME outperforms GradCAM when it comes to the average AUC score across the entire sampleset \ref{tab:table1}. Specifically, on ResNet50, LIME shows a significantly lower AUC score (approximately 11.85) compared to GradCAM (approximately 14.79). This indicates that LIME offers better Explanation Selectivity on ResNet50. On AlexNet, LIME also outperforms GradCAM slitly, although the difference in AUC scores is almost non existing (approximately 10.77 for GradCAM compared to 10.69 for LIME).
+The AUC values displayed in Figure \ref{fig:average-auc-per-exp-and-model-plus-std-dev} and summarized in Table \ref{tab:plain} demonstrate that LIME outperforms GradCAM in terms of the average AUC score across the entire sample set. Specifically, on ResNet50, LIME achieves a notably lower AUC score (approximately 11.85) compared to GradCAM (approximately 14.79), indicating superior Explanation Selectivity. On AlexNet, the difference between LIME and GradCAM is marginal, with GradCAM scoring approximately 10.77, while LIME scores 10.69, suggesting that both methods perform similarly in this context.
 
 % Grafic 1 Avg AUC per model and explainer
 \begin{figure}
     \centering
     \includegraphics[width=.8\linewidth]{results/average-auc-per-exp-and-model-plus-std-dev.png}
-    \caption{Caption}
+    \caption{Average AUC values per Model and Explainer. Standard deviation shows how the AUC values vary across the entire sample set}
     \label{fig:average-auc-per-exp-and-model-plus-std-dev}
 \end{figure}
 
@@ -383,20 +381,18 @@ The AUC values shown in \ref{fig:average-auc-per-exp-and-model-plus-std-dev} rev
     \label{tab:plain}
 \end{table}
 
-%
-The lower average AUC values suggest that LIME has a stronger focus on the most relevant image parts, indicating better selectivity on average which would mean that GradCAM struggles to identify the most
-relevant features, indicating less targeted explanations. 
-One has to discard this theory though, because there are test instances where GradCAM significantly outperforms LIME (Labrador image on AlexNet with aprox. 2.0 to 14.88 AUC values over the first run).
+% GradCAM highly dependent on sample image
+These results suggest that LIME is generally more effective at identifying the most relevant features, as indicated by the lower AUC values, particularly on ResNet50. However, this trend does not hold universally across all instances. For example, in some cases, GradCAM significantly outperforms LIME, such as the Labrador image on AlexNet, where GradCAM achieves a much lower AUC value (approximately 2.0) compared to LIME’s 14.88 in the first run. This suggests that GradCAM’s performance can be highly dependent on the specific image being analyzed.
 
 % Grafic 2 AUC over 10 runs for 3 sample images
 \begin{figure}
     \centering
     \includegraphics[width=.8\linewidth]{results/auc-over10-runs-lineplot.png}
-    \caption{Caption}
+    \caption{AUC scores over 10 runs for three sample images}
     \label{fig:auc-over10-runs-lineplot}
 \end{figure}
 
-While the standard deviation (\ref{tab:table2} and \ref{tab:table3}) shows that there is more variance in AUC scores for GradCAM over the intire sample set on AlexNet, it also shows that on ResNet50 GradCAM has a lower variance than LIME. This highlights that the performance of both explainers is very dependent on the underlying model.
+The standard deviation of AUC values (Tables \ref{tab:table2} and \ref{tab:table3}) provides further insight into the stability of each explainer across different models. On AlexNet, GradCAM exhibits higher variance in AUC scores compared to LIME, suggesting less consistency in its explanations. Conversely, on ResNet50, GradCAM shows lower variance than LIME, highlighting the model-dependent nature of both methods’ performance.
 
 % Table of average AUC standard deviation scores per model and explainer
 \begin{table}
@@ -413,7 +409,7 @@ While the standard deviation (\ref{tab:table2} and \ref{tab:table3}) shows that 
     \label{tab:table1}
 \end{table}
 
-The results also show that GradCAM's biggest stronghold is it's deterministic nature due to it's white-box background. While LIME (black-box) always learns a new approximation of the local explanation, GradCAM always produces the same results (as seen in grafic 2{auc-over10-runs-lineplot}: AUC over 10 runs for 3 sample images). It emphasizes that LIME has significant variance in its explanation, meaning that for a single test instance, it produces a diffrent quality of explanations every time.
+One of GradCAM’s most significant strengths lies in its deterministic nature due to its white-box approach. While LIME (a black-box method) learns a new approximation of the local explanation with each run, GradCAM produces consistent results across multiple runs. This is illustrated in Figure \ref{fig:auc-over10-runs-lineplot}, where the AUC for GradCAM remains stable across 10 runs for the same image, whereas LIME’s AUC values vary significantly. This variability in LIME’s performance, particularly when analyzing individual test instances, raises concerns about the reliability of its explanations.
 
 %%% Standard Dev on three sample images
 % AlexNet
@@ -448,7 +444,7 @@ The results also show that GradCAM's biggest stronghold is it's deterministic na
     \label{tab:table3}
 \end{table}
 
-LIME might produce on average a better AUC score, while GradCAM's performance is very dependent on the sample image and remains stable over multiple runs. 
+Overall, while LIME achieves better average AUC scores, GradCAM’s performance is more consistent across multiple runs and is highly dependent on the model being used. This trade-off between average performance and stability should be considered when choosing between the two methods, depending on the specific application and the need for reliable, repeatable explanations.
 
 % Rückführung auf vorherige parts im Paper wichtig
 \section{Discussion}
@@ -456,29 +452,26 @@ LIME might produce on average a better AUC score, while GradCAM's performance is
 % Lime vielleicht besser auf avg auc über beide modelle
 % gradcam aber viel stabiler und robuster
 % XAI soll Trust in AI modelle erhöhen -> Wie bewirken die beiden explainer das?
-The experimental results provided valuable insights into the relative strengths and weaknesses of the two selected XAI methods—LIME and GradCAM—when applied to object recognition tasks. The most notable finding from this study is that LIME outperformed GradCAM in terms of Explanation Selectivity, with lower AUC values on average, particularly on ResNet50.
+The experimental results provided valuable insights into the relative strengths and weaknesses of the two XAI methods—LIME and GradCAM—when applied to object recognition tasks. From the results, it is evident that LIME outperformed GradCAM on average AUC scores, particularly on ResNet50, where LIME achieved significantly lower AUC values. This suggests that LIME is better at focusing on the most relevant parts of an image, offering a higher degree of Explanation Selectivity across models. However, this benefit comes at the cost of stability, as LIME’s performance varies across runs due to its black-box nature.
+
+In contrast, GradCAM displayed greater consistency and robustness across multiple runs, as seen in its minimal variance in AUC scores. This stability is a key strength, particularly in applications where repeatability is critical. While LIME’s average performance is better, GradCAM’s deterministic behavior can foster greater trust in high-stakes environments where stable and repeatable explanations are paramount.
 
 
 \subsection{Application-Specific Assessment}
-For the specific use case of object recognition, where understanding which parts of an image contributed to a classification is essential, the results indicate that there is no one single winner when it comes to providing clear, consistent, and focused explanations.
-While LIME produces better average AUC values, GradCAMs stability and robustness catches up that lead when it comes to enhancing trust.
+For the specific use case of object recognition, where understanding which parts of an image contributed to a classification is essential,  LIME’s superior average AUC performance makes it a strong contender. However, GradCAM’s robustness offers a distinct advantage in scenarios that demand consistent, model-specific explanations.
 
-In real-world applications such as medical imaging or autonomous driving, where feature importance and accuracy of explanations can directly impact decision-making, GradCAM’s stability and robustness would make it a better choice. GradCAM’s ability to generate consistent explanations across diverse images may lead to better trust and understanding in high-stakes domains where transparent AI systems are critical.
+In real-world applications such as medical imaging or autonomous driving, where reliability and trust in AI models are crucial, because it can directly impact decision-making, GradCAM’s deterministic output is likely to be more advantageous. Its ability to generate consistent and repeatable explanations may lead to higher trust, particularly in fields like medicine, where understanding the rationale behind decisions is critical for both practitioners and patients. Additionally, GradCAM’s integration with the model architecture provides deeper insights into how the model arrives at its decisions, making it valuable in expert-driven fields such as pathology or robotics.
 
-On the other hand, GradCAM could be particularly useful in scenarios where visual interpretability is paramount and model-specific insights are needed. For instance, in expert-driven fields such as pathology or robotics, where understanding the model’s inner workings can offer deeper insights, GradCAM’s internal knowledge of the model’s architecture might be preferred despite its lower selectivity.
+Conversely, LIME’s adaptability and model-agnostic nature make it well-suited for broader applications where the focus is on generalization across different models. For example, in applications involving rapidly changing datasets or models, such as product recommendation systems or real-time image analysis, LIME’s flexibility allows it to provide effective explanations without needing access to model internals.
 
+Ultimately, the findings suggest that the selection of an XAI method should be guided by the specific needs of the application, balancing the trade-offs between explanation accuracy (as seen with LIME) and explanation consistency (as demonstrated by GradCAM). For high-stakes environments requiring stable, model-specific insights, white-box methods like GradCAM are preferable. For broader applications needing flexibility, black-box methods like LIME offer greater generalization and adaptability.
 
 \subsection{Generalization of Results}
 
-The results of this study provide broader implications for the selection of XAI methods across various domains. While this experiment was conducted on image classification tasks with AlexNet and ResNet50, the observed trade-offs between white-box and black-box methods are likely generalizable to other models and applications. 
+The results of this study suggest broader implications for the selection of XAI methods across various domains. While the experiments were conducted using AlexNet and ResNet50, the trade-offs between white-box and black-box methods observed here are likely applicable to other models and tasks beyond image classification.
+When selecting an XAI method, it is essential to consider the context and requirements of the application. For scenarios where consistency and model-specific insights are critical—such as in regulated industries or research environments—white-box methods like GradCAM provide significant advantages. GradCAM’s internal knowledge of the model’s architecture allows it to offer stable and transparent explanations that enhance user trust.
 
-Moreover, this study underscores the need for a careful consideration of context when choosing an XAI method. In scenarios where model-specific insights are essential (e.g., research environments or development of new architectures), white-box methods like GradCAM may offer valuable model-specific explanations. However, for broader applications requiring generalization across models, black-box methods like LIME prove to be more effective.
-
-In conclusion, the findings of this study suggest that the appropriate XAI method should be selected based on the specific requirements of the application domain.
-%%%Kurz zusammenfassen für was LIME und für was GradCAM besser ist.
-
-
-
+On the other hand, black-box methods like LIME may be preferable in applications that demand flexibility and generalization across different models. LIME’s ability to provide explanations for any model makes it a versatile tool, especially in dynamic environments where AI systems are frequently updated or retrained.
 
 %% The file named.bst is a bibliography style file for BibTeX 0.99c
 
